@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -21,6 +23,9 @@ func main() {
 
 	buf := bytes.NewBufferString("")
 	for _, entry := range entries {
+		if strings.HasPrefix(entry.Name(), ".") {
+			continue
+		}
 		buf.WriteString(fmt.Sprintf("<a href='%s'>%s</a><br/>\n", entry.Name(), entry.Name()))
 	}
 	err = os.WriteFile("index.html", buf.Bytes(), 0644)
